@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP-939 | Análise Sistêmica | Dr. K.W. Voss | Site-02</title>
+
+<!-- MathJax — obrigatório. Quem não incluiu isso nos relatórios anteriores explica o nível do trabalho -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   FUNDAÇÃO SCP — TEMA OPERACIONAL SITE-02
+   Dr. Klaus W. Voss — Sistema Gerado em Campo
+   Nota: não é estético — é funcional. A distinção importa.
+   ============================================================ */
+
+:root {
+  --bg-primary:    #090909;
+  --bg-secondary:  #0c0c0c;
+  --bg-card:       #111111;
+  --bg-elevated:   #171717;
+  --border-dim:    #2a2a2a;
+  --border-mid:    #3a3a3a;
+  --border-bright: #505050;
+  /* Vermelho / amarelo / verde preservados para semântica e SCP */
+  --accent-red:    #c0392b;
+  --accent-red-glow: rgba(192,57,43,0.35);
+  --accent-amber:  #e67e22;
+  --accent-teal:   #0e9c78;
+  --danger:        #e74c3c;
+  --warn:          #e67e22;
+  --success:       #0e9c78;
+  /* Neutros (tema P&B profissional — ex-azul/roxo) */
+  --accent-muted:  #737373;
+  --accent-muted-bright: #9ca3af;
+  --accent-blue:   #737373;
+  --accent-purple: #656565;
+  --info:          #737373;
+  --text-primary:  #ebebeb;
+  --text-secondary:#a6a6a6;
+  --text-dim:      #6b6b6b;
+  --text-muted:    #3d3d3d;
+  --font-mono:     'Share Tech Mono', monospace;
+  --font-head:     'Rajdhani', sans-serif;
+  --font-body:     'Exo 2', sans-serif;
+  --scan-opacity:  0.025;
+  --content-pad:   clamp(1rem, 2.5vw, 2.25rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.22) 2px,
+      rgba(0,0,0,0.22) 4px
+    ),
+    radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(0,0,0,0.45) 0%, transparent 50%);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+/* ══════════════════════════════════════════════
+   HEADER PRINCIPAL
+   ══════════════════════════════════════════════ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9,9,9,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--accent-red);
+  padding: 0 clamp(0.75rem, 2vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  min-height: 56px;
+  box-shadow: 0 2px 24px rgba(192,57,43,0.12);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.scp-badge {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  color: var(--accent-red);
+  text-shadow: 0 0 12px var(--accent-red-glow);
+  border: 1px solid var(--accent-red);
+  padding: 2px 10px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scp-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(192,57,43,0.08), transparent);
+  animation: sweep 3s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.header-title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 8px var(--danger);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--danger); }
+  50% { opacity: 0.5; box-shadow: 0 0 4px var(--danger); }
+}
+
+.header-meta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+/* ══════════════════════════════════════════════
+   CLASSIFICAÇÃO BANNER
+   ══════════════════════════════════════════════ */
+.classification-banner {
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.25) 100%);
+  border-top: 1px solid rgba(192,57,43,0.45);
+  border-bottom: 1px solid rgba(192,57,43,0.45);
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.classification-banner-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(0.62rem, 1.8vw, 0.8rem);
+  letter-spacing: 0.18em;
+  color: var(--danger);
+  text-align: center;
+  text-transform: uppercase;
+  padding-bottom: 0.65rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(192,57,43,0.35);
+  flex-shrink: 0;
+  line-height: 1.35;
+}
+
+.classification-banner-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 1rem;
+}
+
+.class-item { }
+.class-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.class-value {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+.class-value.danger { color: var(--danger); text-shadow: 0 0 8px rgba(231,76,60,0.4); }
+.class-value.warn   { color: var(--warn); }
+.class-value.info   { color: var(--accent-blue); }
+.class-value.normal { color: var(--text-primary); }
+
+/* ══════════════════════════════════════════════
+   LAYOUT PRINCIPAL
+   ══════════════════════════════════════════════ */
+.main-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  min-height: calc(100vh - 56px);
+  width: 100%;
+}
+
+/* ── SIDEBAR NAV ── */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-dim);
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 0 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.nav-item {
+  display: block;
+  padding: 0.45rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  color: var(--text-primary);
+  border-left-color: var(--accent-muted-bright);
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-item.active {
+  color: var(--accent-red);
+  border-left-color: var(--accent-red);
+  background: rgba(192,57,43,0.06);
+}
+
+.nav-item.complement {
+  color: var(--accent-teal);
+}
+.nav-item.complement:hover {
+  border-left-color: var(--accent-teal);
+  background: rgba(14,156,120,0.06);
+}
+
+/* ── CONTEÚDO (preenche a coluna — sem faixa vazia à direita) ── */
+.content {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  padding: var(--content-pad);
+  padding-bottom: 3rem;
+}
+
+/* ══════════════════════════════════════════════
+   SEÇÕES
+   ══════════════════════════════════════════════ */
+.doc-section {
+  margin-bottom: 3rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.section-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent-red);
+  letter-spacing: 0.1em;
+  min-width: 40px;
+}
+
+.section-title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.section-title.complement {
+  color: var(--accent-teal);
+}
+
+.section-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.badge-original {
+  background: rgba(192,57,43,0.15);
+  border: 1px solid rgba(192,57,43,0.3);
+  color: var(--danger);
+}
+
+.badge-complement {
+  background: rgba(14,156,120,0.15);
+  border: 1px solid rgba(14,156,120,0.3);
+  color: var(--accent-teal);
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  border-radius: 8px;
+  padding: 1.15rem 1.2rem 1.15rem 1.35rem;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 4px 18px rgba(0,0,0,0.35);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--border-bright);
+  border-radius: 8px 0 0 8px;
+  transition: background 0.2s;
+}
+
+.card:hover {
+  border-color: var(--border-bright);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 8px 28px rgba(0,0,0,0.45);
+}
+.card:hover::before { background: var(--accent-muted-bright); }
+
+.card.danger::before { background: var(--danger); }
+.card.warn::before   { background: var(--warn); }
+.card.info::before   { background: var(--accent-muted); }
+.card.success::before{ background: var(--accent-teal); }
+
+.card-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.card-value {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.card-note {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── ALERT BOXES ── */
+.alert {
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  border-left: 3px solid;
+  position: relative;
+}
+
+.alert-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.alert-danger {
+  background: rgba(231,76,60,0.08);
+  border-color: var(--danger);
+  color: #f5a89e;
+}
+.alert-danger .alert-label { color: var(--danger); }
+
+.alert-warn {
+  background: rgba(230,126,34,0.08);
+  border-color: var(--warn);
+  color: #f5c48a;
+}
+.alert-warn .alert-label { color: var(--warn); }
+
+.alert-info {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--accent-muted);
+  color: var(--text-secondary);
+}
+.alert-info .alert-label { color: var(--accent-muted-bright); }
+
+.alert-success {
+  background: rgba(14,156,120,0.08);
+  border-color: var(--accent-teal);
+  color: #8ee0cb;
+}
+.alert-success .alert-label { color: var(--accent-teal); }
+
+/* ── FORMULA / CODE BLOCKS ── */
+.formula-block {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-left: 3px solid var(--accent-muted);
+  border-radius: 0 4px 4px 0;
+  padding: 1rem 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 1rem 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+.formula-block .formula-tag {
+  position: absolute;
+  top: 6px; right: 10px;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ── BARS ── */
+.bar-section { margin: 1rem 0; }
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.6rem 0;
+  flex-wrap: wrap;
+}
+
+.bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  min-width: min(100%, 180px);
+  flex: 1 1 140px;
+  letter-spacing: 0.04em;
+}
+
+.bar-track {
+  flex: 1 1 120px;
+  min-width: 80px;
+  height: 6px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border-dim);
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  position: relative;
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0;
+  width: 2px; height: 100%;
+  background: rgba(255,255,255,0.5);
+  filter: blur(1px);
+}
+
+.bar-val {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── TAGS ── */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin: 2px 3px 2px 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.tag-red    { background: rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.3); color: #e8897f; }
+.tag-amber  { background: rgba(212,130,10,0.12); border-color: rgba(212,130,10,0.3); color: #e6a84a; }
+.tag-teal   { background: rgba(14,156,120,0.12); border-color: rgba(14,156,120,0.3); color: #5eceb5; }
+.tag-blue   { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); color: var(--accent-muted-bright); }
+.tag-gray   { background: rgba(80,100,120,0.12); border-color: rgba(80,100,120,0.3); color: var(--text-secondary); }
+.tag-purple { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: #b0b0b0; }
+
+/* ── PROJECT BLOCKS ── */
+.proj-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+}
+
+.proj-block:hover { border-color: var(--border-bright); box-shadow: 0 6px 22px rgba(0,0,0,0.38); }
+
+.proj-title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.proj-body {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.proj-body p { margin-bottom: 0.5rem; }
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-dim);
+  margin: 2rem 0;
+}
+
+/* ══════════════════════════════════════════════
+   COMPLEMENT SECTIONS — CAMADA VOSS
+   ══════════════════════════════════════════════ */
+.complement-section {
+  background: rgba(14,156,120,0.03);
+  border: 1px solid rgba(14,156,120,0.15);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.complement-section::before {
+  content: '⬡ CAMADA DE ANÁLISE — DR. K.W. VOSS';
+  position: absolute;
+  top: -9px; left: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: var(--accent-teal);
+  background: var(--bg-primary);
+  padding: 0 8px;
+  text-transform: uppercase;
+}
+
+/* ── FLOW DIAGRAM SVG WRAPPER ── */
+.diagram-wrap {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  margin: 1rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.diagram-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* ── MATHJAX OVERRIDE ── */
+.MJX-container, mjx-container {
+  color: var(--text-primary) !important;
+  overflow-x: auto;
+}
+
+.math-block {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-left: 3px solid var(--accent-muted);
+  border-radius: 0 6px 6px 0;
+  padding: 1.2rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.math-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-muted-bright);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+/* ── SIGNATURE ── */
+.signature {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-dim);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.signature strong { color: var(--text-secondary); }
+
+.attribution-notice {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── COLLAPSIBLE ── */
+details {
+  margin: 0.5rem 0;
+}
+
+details summary {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: '▶'; font-size: 0.6rem; transition: transform 0.2s; }
+details[open] summary::before { transform: rotate(90deg); }
+details summary:hover { background: var(--bg-card); color: var(--text-primary); }
+
+details .details-content {
+  border: 1px solid var(--border-dim);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 1rem;
+  background: var(--bg-secondary);
+}
+
+/* ── RESPONSIVE (tablet / mobile automático) ── */
+@media (max-width: 1100px) {
+  .main-layout { grid-template-columns: 200px minmax(0, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    max-height: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    padding: 0.65rem 0.85rem;
+    overflow-x: visible;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .nav-section-label {
+    flex: 0 0 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.15rem;
+    padding: 0 0.25rem;
+    font-size: 0.55rem;
+  }
+  .nav-section-label:first-child { margin-top: 0; }
+  .nav-item {
+    flex: 0 1 auto;
+    white-space: nowrap;
+    padding: 0.45rem 0.75rem;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); }
+  .nav-item.active {
+    border-bottom-color: var(--accent-red);
+    border-left: none;
+    background: rgba(192,57,43,0.08);
+  }
+  .nav-item.complement.active {
+    border-bottom-color: var(--accent-teal);
+    background: rgba(14,156,120,0.08);
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 13px; }
+  .site-header { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .header-left { flex-wrap: wrap; gap: 0.5rem; }
+  .header-title { font-size: 0.72rem; letter-spacing: 0.1em; }
+  .scp-badge { font-size: 0.95rem; letter-spacing: 0.12em; padding: 2px 8px; }
+  .header-right { gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+  .header-meta { font-size: 0.6rem; }
+  .classification-banner {
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  .classification-banner-fields {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .section-header { flex-wrap: wrap; gap: 0.5rem; }
+  .section-badge { margin-left: 0; }
+  .bar-row { flex-direction: column; align-items: stretch; gap: 0.35rem; }
+  .bar-label { flex: none; min-width: 0; }
+  .bar-track { width: 100%; }
+  .bar-val { text-align: left; }
+}
+
+@media (max-width: 380px) {
+  .classification-banner-fields { grid-template-columns: 1fr; }
+}
+
+/* ── PRINT ── */
+@media print {
+  .sidebar, .site-header { display: none; }
+  .main-layout { display: block; }
+  .content { padding: 0; max-width: none; }
+  body { background: white; color: black; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     HEADER
+     ════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-left">
+    <div class="scp-badge">SCP ◆ FUNDAÇÃO</div>
+    <div class="header-title">Análise Sistêmica — SCP-939</div>
+  </div>
+  <div class="header-right">
+    <span class="header-meta">SITE-02</span>
+    <!-- O status "ativo" aqui não é estético. É uma advertência. -->
+    <div class="status-dot"></div>
+    <span class="header-meta" id="clock">--:--:--</span>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════
+     CLASSIFICATION BANNER
+     ════════════════════════════════════════════════════════ -->
+<div class="classification-banner">
+  <p class="classification-banner-title">◆ Documento classificado — Acesso restrito a SCD ◆</p>
+  <div class="classification-banner-fields">
+  <div class="class-item">
+    <div class="class-label">Identificador</div>
+    <div class="class-value danger">SCP-939</div>
+  </div>
+  <div class="class-item">
+    <div class="class-label">Classe de Objeto</div>
+    <div class="class-value warn">EUCLID</div>
+  </div>
+  <div class="class-item">
+    <div class="class-label">Autor do Relatório</div>
+    <div class="class-value normal">Dr. Klaus W. Voss</div>
+  </div>
+  <div class="class-item">
+    <div class="class-label">Departamento</div>
+    <div class="class-value info">Departamento Cientifico — Site 02</div>
+  </div>
+  <div class="class-item">
+    <div class="class-label">Localização</div>
+    <div class="class-value normal">SITE-02</div>
+  </div>
+  <div class="class-item">
+    <div class="class-label">Data</div>
+    <div class="class-value normal">30/03/2026</div>
+  </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     LAYOUT PRINCIPAL
+     ════════════════════════════════════════════════════════ -->
+<div class="main-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <div class="nav-section-label">Relatório Original</div>
+    <a class="nav-item active" href="#s1">§1 Desconstrução Estrutural</a>
+    <a class="nav-item" href="#s2">§2 Análise Biológica</a>
+    <a class="nav-item" href="#s3">§3 Engenharia do AMN-C227</a>
+    <a class="nav-item" href="#s4">§4 Modelagem Sistêmica</a>
+    <a class="nav-item" href="#s5">§5 Cálculos e Estimativas</a>
+    <a class="nav-item" href="#s6">§6 Projetos Propostos</a>
+    <a class="nav-item" href="#s7">§7 Protocolo Final</a>
+
+    <div class="nav-section-label">Complemento Técnico</div>
+    <a class="nav-item complement" href="#c1">⬡ Fluxo Sistêmico</a>
+    <a class="nav-item complement" href="#c2">⬡ Modelo Matemático</a>
+    <a class="nav-item complement" href="#c3">⬡ Loop AMN-C227</a>
+    <a class="nav-item complement" href="#c4">⬡ Parâmetros Físicos</a>
+    <a class="nav-item complement" href="#c5">⬡ Janela de Vulnerabilidade</a>
+  </nav>
+
+  <!-- ── CONTEÚDO ── -->
+  <main class="content">
+
+    <!-- ════ AUTORIA ════ -->
+    <div class="alert alert-info" style="margin-bottom:2rem;">
+      <span class="alert-label">Aviso de Autoria</span>
+      Este conteúdo foi estruturado sem alteração do material original. Qualquer uso derivado desta modelagem exige atribuição ao autor (<strong>Dr. Klaus W. Voss — Departamento Cientifico — Site 02</strong>) e ao executor técnico responsável pela estruturação digital.
+    </div>
+
+    <!-- ════════════════════════════════
+         §1 — DESCONSTRUÇÃO ESTRUTURAL
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s1">
+      <div class="section-header">
+        <span class="section-number">§ 01</span>
+        <h2 class="section-title">Desconstrução Estrutural</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card danger">
+          <div class="card-label">Núcleo funcional</div>
+          <div class="card-value">Aparato predatório sensorial</div>
+          <div class="card-note">Mandíbula + fossetas lorais + cristas dorsais = sistema de caça integrado. Nenhum desses elementos é redundante.</div>
+        </div>
+        <div class="card info">
+          <div class="card-label">Componentes auxiliares</div>
+          <div class="card-value">Sistema respiratório atrofiado</div>
+          <div class="card-note">Reaproveitado como câmara de dispersão de AMN-C227. Função biológica original: vestigial. Função anômala: primária.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Elementos redundantes previstos</div>
+          <div class="card-value">Trato digestivo residual</div>
+          <div class="card-note">Acúmulo de material ingerido antes da regurgitação indica câmara de retenção não funcional para digestão — só para armazenamento temporário.</div>
+        </div>
+        <div class="card warn">
+          <div class="card-label">Cobertura dérmica</div>
+          <div class="card-value">Pele permeável + composto hemoglobínico</div>
+          <!-- A equipe anterior não modelou isso como vetor de input. Isso seria imperdoável se não fosse apenas incompetência. -->
+          <div class="card-note">Translucidez vermelha indica absorção transdermal como hipótese de obtenção energética primária. A equipe anterior não modelou isso como vetor de input — falha básica.</div>
+        </div>
+        <div class="card danger">
+          <div class="card-label">Ausências confirmadas</div>
+          <div class="card-value">SNP/SNC, sist. circulatório, digestão</div>
+          <div class="card-note">A entidade opera sem os sistemas que definem organismos padrão. Isso não é degeneração — é reconfiguração total para função predatória pura.</div>
+        </div>
+      </div>
+
+      <!-- COMPLEMENTO §1 — FLUXO SISTÊMICO -->
+      <div class="complement-section" id="c1">
+        <div class="section-header" style="border-bottom-color: rgba(14,156,120,0.2);">
+          <span class="section-number" style="color:var(--accent-teal)">⬡</span>
+          <h3 class="section-title complement">Fluxo Sistêmico — Arquitetura Funcional</h3>
+          <span class="section-badge badge-complement">COMPLEMENTO TÉCNICO</span>
+        </div>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Fig. 1 — Diagrama de Fluxo: Input → Processamento → Output | SCP-939</div>
+          <!-- Este diagrama representa o que qualquer analista competente deveria ter feito no ciclo anterior -->
+          <svg viewBox="0 0 820 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;margin:0 auto;">
+            <defs>
+              <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#8a8a8a"/>
+              </marker>
+              <marker id="arr-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#c0392b"/>
+              </marker>
+              <marker id="arr-teal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#0e9c78"/>
+              </marker>
+              <filter id="glow-blue">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+
+            <!-- INPUTS -->
+            <rect x="10" y="40" width="130" height="44" rx="3" fill="rgba(255,255,255,0.07)" stroke="#8a8a8a" stroke-width="1"/>
+            <text x="75" y="57" fill="#bdbdbd" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">ESTÍMULO SONORO</text>
+            <text x="75" y="70" fill="#9a9a9a" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Ruído ambiente / voz</text>
+
+            <rect x="10" y="98" width="130" height="44" rx="3" fill="rgba(255,255,255,0.07)" stroke="#8a8a8a" stroke-width="1"/>
+            <text x="75" y="115" fill="#bdbdbd" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">ESTÍMULO TÉRMICO</text>
+            <text x="75" y="128" fill="#9a9a9a" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Assinatura IR &lt;10m</text>
+
+            <rect x="10" y="156" width="130" height="44" rx="3" fill="rgba(255,255,255,0.07)" stroke="#8a8a8a" stroke-width="1"/>
+            <text x="75" y="173" fill="#bdbdbd" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">PRESSÃO DE AR</text>
+            <text x="75" y="186" fill="#9a9a9a" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Cristas dorsais</text>
+
+            <!-- ARROWS to CORE -->
+            <line x1="142" y1="62" x2="250" y2="105" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arr)" opacity="0.7"/>
+            <line x1="142" y1="120" x2="250" y2="125" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arr)" opacity="0.9"/>
+            <line x1="142" y1="178" x2="250" y2="145" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arr)" opacity="0.7"/>
+
+            <!-- CORE PROCESSOR -->
+            <rect x="255" y="70" width="150" height="110" rx="4" fill="rgba(14,156,120,0.08)" stroke="#0e9c78" stroke-width="1.5"/>
+            <text x="330" y="92" fill="#5eceb5" font-family="'Rajdhani',sans-serif" font-size="9.5" text-anchor="middle" letter-spacing="1" font-weight="600">NÚCLEO FUNCIONAL</text>
+            <line x1="265" y1="99" x2="395" y2="99" stroke="rgba(14,156,120,0.3)" stroke-width="0.5"/>
+            <text x="330" y="115" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Fossetas lorais (IR)</text>
+            <text x="330" y="128" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Cristas dorsais (Δpressão)</text>
+            <text x="330" y="141" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Aparato mandibular</text>
+            <text x="330" y="154" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Câmara respiratória</text>
+            <text x="330" y="167" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7.5" text-anchor="middle">Síntese vocal anômala</text>
+
+            <!-- ARROWS to OUTPUTS -->
+            <line x1="407" y1="100" x2="510" y2="65" stroke="#c0392b" stroke-width="1" marker-end="url(#arr-red)" opacity="0.8"/>
+            <line x1="407" y1="125" x2="510" y2="125" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arr-red)" opacity="0.9"/>
+            <line x1="407" y1="150" x2="510" y2="185" stroke="#0e9c78" stroke-width="1" marker-end="url(#arr-teal)" opacity="0.8"/>
+
+            <!-- OUTPUTS -->
+            <rect x="514" y="38" width="145" height="50" rx="3" fill="rgba(192,57,43,0.10)" stroke="#c0392b" stroke-width="1"/>
+            <text x="586" y="57" fill="#e8897f" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">PREDAÇÃO FÍSICA</text>
+            <text x="586" y="71" fill="#a05550" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle">Força &gt;28.000N / escalada</text>
+
+            <rect x="514" y="98" width="145" height="50" rx="3" fill="rgba(192,57,43,0.10)" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="586" y="117" fill="#e8897f" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">EMISSÃO AMN-C227</text>
+            <text x="586" y="131" fill="#a05550" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle">Câmara resp. → dispersão</text>
+
+            <rect x="514" y="158" width="145" height="50" rx="3" fill="rgba(14,156,120,0.08)" stroke="#0e9c78" stroke-width="1"/>
+            <text x="586" y="177" fill="#5eceb5" font-family="'Share Tech Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="0.5">IMITAÇÃO VOCAL</text>
+            <text x="586" y="191" fill="#3d9e85" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle">Atração / desorientação</text>
+
+            <!-- FEEDBACK LOOP -->
+            <path d="M 586 208 Q 586 250 410 260 Q 200 260 75 220" fill="none" stroke="#c0392b" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-red)"/>
+            <text x="330" y="258" fill="#7a3530" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle">↺ AMN-C227 incapacita presa → presa disponível → coleta de biomassa → síntese → loop</text>
+
+            <!-- LABEL INPUT/OUTPUT/PROC -->
+            <text x="75" y="25" fill="#6b6b6b" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle" letter-spacing="1">INPUT SENSORIAL</text>
+            <text x="330" y="25" fill="#6b6b6b" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle" letter-spacing="1">PROCESSAMENTO</text>
+            <text x="586" y="25" fill="#6b6b6b" font-family="'Share Tech Mono',monospace" font-size="7" text-anchor="middle" letter-spacing="1">OUTPUT ANÔMALO</text>
+          </svg>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Representação Formal — Arquitetura Funcional SCP-939</div>
+          <!-- A ausência de SNP/SNC clássico não significa ausência de processamento — apenas que o substrato é diferente -->
+          <p>\[
+            \Phi_{939} = \{E_s, E_t, E_p\} \xrightarrow{\mathcal{N}_{func}} \{P_{pred},\; G_{AMN},\; V_{vocal}\}
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            Onde \(\Phi_{939}\) é o estado funcional da entidade; \(E_s, E_t, E_p\) são os vetores de entrada sensorial (acústico, térmico, pressão); \(\mathcal{N}_{func}\) é o núcleo de processamento anômalo; e \(P_{pred}, G_{AMN}, V_{vocal}\) são os outputs operacionais documentados.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §2 — ANÁLISE BIOLÓGICA
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s2">
+      <div class="section-header">
+        <span class="section-number">§ 02</span>
+        <h2 class="section-title">Análise Biológica — Previsões e Estimativas</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-label">Nota de Confiança do Modelo</span>
+        Modelo baseado em dados secundários. Confiança: Média-Alta para estrutura física | Média para metabolismo | Baixa para neurologia anômala.
+      </div>
+
+      <div class="cards-grid">
+        <div class="card info">
+          <div class="card-label">Metabolismo estimado (análogo)</div>
+          <div class="card-value">Absorção transdermal + quimiotrófico</div>
+          <div class="card-note">Hipótese: o composto hemoglobínico na pele realiza troca de gases e nutrientes diretamente com o ambiente. Estimativa: ~800–1.200 kcal/equivalente por ciclo de repouso, escalonado pelo peso (~250 kg).</div>
+        </div>
+        <div class="card warn">
+          <div class="card-label">Musculatura estimada</div>
+          <div class="card-value">Composição predominante: fibras de contração rápida (tipo IIx)</div>
+          <div class="card-note">Justificativa: força de mordida &gt;35 MPa, escalada rápida de parede vertical, capacidade de desmembramento manual. Para 250 kg, estimativa de ~55–65% da massa corporal em tecido muscular ativo (~137–162 kg).</div>
+        </div>
+        <div class="card danger">
+          <div class="card-label">Força de mordida — cálculo</div>
+          <div class="card-value">≥ 35 MPa (documentado)</div>
+          <div class="card-note">Convertido: 35 MPa × área estimada de contato mandibular (~8 cm²) = ~28.000 N ≈ 2.856 kgf. Para comparação: <em>Crocodylus porosus</em> = ~16.460 N. O 939 supera em ~70% o maior predador mandibular conhecido.</div>
+        </div>
+        <div class="card warn">
+          <div class="card-label">Pressão de garras estimada</div>
+          <div class="card-value">~1.800–2.400 N por garra</div>
+          <div class="card-note">Baseado em: capacidade de escalada em parede (sustentando 250 kg), remoção de órgãos internos com precisão cirúrgica (relatório 953 como referência comportamental cruzada). Cerdas aumentam aderência via microancoragem.</div>
+        </div>
+        <div class="card success">
+          <div class="card-label">Capacidade de regeneração (hipótese)</div>
+          <div class="card-value">Alta — limiar crítico desconhecido</div>
+          <div class="card-note">Dano severo por minigun (relatório #002): entidade sobreviveu e ficou incapacitada, não morta. Tempo de recuperação estimado: 72–96h com base em ausência de sistemas circulatórios convencionais. O mecanismo de reparo é possivelmente autofágico ou ambiental.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Limite evolutivo estimado</div>
+          <div class="card-value">Apex predatório — sem pressão seletiva interna</div>
+          <div class="card-note">A ausência de digestão, circulação e SNC clássico sugere que a evolução desta entidade convergiu para eficiência de caça máxima com overhead sistêmico mínimo. Filhotes representam possível janela de plasticidade.</div>
+        </div>
+      </div>
+
+      <!-- COMPLEMENTO §2 — PARÂMETROS FÍSICOS -->
+      <div class="complement-section" id="c4">
+        <div class="section-header" style="border-bottom-color: rgba(14,156,120,0.2);">
+          <span class="section-number" style="color:var(--accent-teal)">⬡</span>
+          <h3 class="section-title complement">Representação Matemática — Parâmetros Físicos</h3>
+          <span class="section-badge badge-complement">COMPLEMENTO TÉCNICO</span>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Força de Mordida — Derivação Formal</div>
+          <!-- Este cálculo foi simplificado para representação. Ainda assim, mais rigoroso que qualquer estimativa anterior. -->
+          <p>\[
+            F_{mordida} = \sigma_{MPa} \times A_{contato} = 35\,\text{MPa} \times 8 \times 10^{-4}\,\text{m}^2 = 28{.}000\,\text{N}
+          \]</p>
+          <p>\[
+            \Delta F_{rel} = \frac{F_{939} - F_{croc}}{F_{croc}} = \frac{28.000 - 16.460}{16.460} \approx +70{,}1\%
+          \]</p>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Estimativa de Massa Muscular Ativa</div>
+          <p>\[
+            M_{musc} = \rho_{fibra} \times V_{est} \approx 1{,}08\,\frac{\text{g}}{\text{cm}^3} \times 138{.}900\,\text{cm}^3 \approx 150\,\text{kg}
+          \]</p>
+          <p>\[
+            \eta_{musc} = \frac{M_{musc}}{M_{total}} = \frac{150}{250} = 60\% \quad \text{(dentro do intervalo estimado 55–65\%)}
+          \]</p>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Hipótese de Recuperação — Modelo Autofágico</div>
+          <p>\[
+            R(t) = R_{max} \left(1 - e^{-\lambda t}\right), \quad \lambda = \frac{\ln 2}{t_{1/2}}
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            Para \(t_{1/2} \approx 42\text{h}\) (metade da janela de recuperação estimada 72–96h): \(\lambda \approx 0{,}0165\,\text{h}^{-1}\). O mecanismo exato de \(R_{max}\) permanece indeterminado — variável crítica para protocolos de neutralização.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §3 — ENGENHARIA DO AMN-C227
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s3">
+      <div class="section-header">
+        <span class="section-number">§ 03</span>
+        <h2 class="section-title">Engenharia Reversa do AMN-C227</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="formula-block">
+        <span class="formula-tag">modelo observado</span>
+        Output(gás) = f(volume_câmara_respiratória, material_ingerido, pressão_regurgitação)<br><br>
+        ECt50 = 0,0015 mg·min/m³ → Concentração de knockout em ambiente fechado (~30m³): ≈ 0,045 mg em 60s<br>
+        Onset de amnésia anterógrada: &lt;90s de exposição contínua<br>
+        Persistência na corrente sanguínea: &lt;60 min após cessação
+      </div>
+
+      <div class="cards-grid">
+        <div class="card danger">
+          <div class="card-label">Sequência de produção (observada)</div>
+          <div class="card-value">Ingestão → Acúmulo → Regurgitação → Dispersão</div>
+          <!-- Essa recontextualização inverte toda a lógica de contenção. Espero que seja óbvio agora. -->
+          <div class="card-note">A ingestão NÃO é alimentar. É coleta de biomassa para síntese do gás. Isso recontextualiza o comportamento predatório: matar é produção industrial de AMN-C227, não nutrição.</div>
+        </div>
+        <div class="card warn">
+          <div class="card-label">Eficiência estimada</div>
+          <div class="card-value">~1 corpo adulto → ~0,3–0,8 mg de AMN-C227</div>
+          <div class="card-note">Hipótese baseada no ECt50 e no volume de gás necessário para incapacitar o segundo CD em contenção (~80m³ com ventilação parcial). Rendimento por biomassa é notavelmente alto.</div>
+        </div>
+      </div>
+
+      <!-- COMPLEMENTO §3 — LOOP AMN-C227 -->
+      <div class="complement-section" id="c3">
+        <div class="section-header" style="border-bottom-color: rgba(14,156,120,0.2);">
+          <span class="section-number" style="color:var(--accent-teal)">⬡</span>
+          <h3 class="section-title complement">Loop de Produção — AMN-C227 como Sistema Industrial</h3>
+          <span class="section-badge badge-complement">COMPLEMENTO TÉCNICO</span>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Modelo Farmacocinético — ECt50 e Concentração Crítica</div>
+          <!-- A equipe anterior "achou interessante" o AMN-C227. Que análise penetrante. -->
+          <p>\[
+            ECt_{50} = 0{,}0015\,\frac{\text{mg}\cdot\text{min}}{\text{m}^3}
+          \]</p>
+          <p>\[
+            C_{knockout}(V,t) = \frac{ECt_{50}}{t} = \frac{0{,}0015}{1}\,\frac{\text{mg}}{\text{m}^3} \quad \Rightarrow \quad
+            m_{req}(V) = C_{ko} \times V
+          \]</p>
+          <p>\[
+            m_{req}(30\,\text{m}^3) = 0{,}0015 \times 30 = 0{,}045\,\text{mg em }60\text{s}
+          \]</p>
+          <p>\[
+            m_{req}(80\,\text{m}^3) \approx 0{,}12\,\text{mg em }60\text{s} \quad \text{(ventilação parcial degrada ECt50 em }> 70\%\text{)}
+          \]</p>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Eficiência de Conversão Biomassa → AMN-C227</div>
+          <p>\[
+            \eta_{conv} = \frac{G_{AMN}}{M_{biomassa}} \in [0{,}3;\; 0{,}8]\,\frac{\text{mg}}{\text{kg corpo adulto}}
+          \]</p>
+          <p>\[
+            \text{Doses de KO disponíveis por indivíduo capturado} = \frac{\eta_{conv} \times M_{bio}}{C_{ko} \times V_{amb}}
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            Um único adulto capturado (~75 kg) gera potencialmente 22,5–60 mg de AMN-C227 — suficiente para 500–1.333 exposições de knockout em ambiente padrão de 30m³. O argumento para o Projeto GAMMA é autoevidente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §4 — MODELAGEM SISTÊMICA
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s4">
+      <div class="section-header">
+        <span class="section-number">§ 04</span>
+        <h2 class="section-title">Modelagem Sistêmica</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="formula-block">
+        <span class="formula-tag">modelo primário</span>
+        SCP-939(t) = f(E_sensorial, E_acústica, E_térmica, V_AMN)<br><br>
+        E_sensorial = cristas dorsais (pressão/fluxo ar) + fossetas lorais (IR até ~10m estimado)<br>
+        E_acústica = imitação vocal + recepção de sons (threshold de desconforto: ruído &gt;~90dB contínuo, janela: ~8–15s)<br>
+        E_térmica = caça noturna ativa documentada → visão térmica primária<br>
+        V_AMN = estoque de gás ∝ biomassa ingerida recente<br><br>
+        Agressividade(t) = base_alta + Δ(estímulo_sonoro) + Δ(biomassa_disponível) - Δ(dano_acumulado)
+      </div>
+
+      <div class="cards-grid">
+        <div class="card danger">
+          <div class="card-label">Loop de retroalimentação primário</div>
+          <div class="card-value">Ruído → agitação → caça → AMN → cegueira da presa → predação</div>
+          <div class="card-note">O AMN-C227 fecha o loop: a presa incapacitada não pode fugir, aumentando eficiência de caça. Sistema de caça é semi-autossuficiente.</div>
+        </div>
+        <div class="card warn">
+          <!-- A janela não é estável e degrada. Isso é crítico para qualquer protocolo de emergência. -->
+          <div class="card-label">Ponto de falha identificado</div>
+          <div class="card-value">Janela de desorientação acústica (~8–15s)</div>
+          <div class="card-note">Sons altos causam recuo temporário. Após esse threshold temporal, a entidade adapta o comportamento e a resposta de caça aumenta. A janela não é estável — degrada com exposição repetida.</div>
+        </div>
+      </div>
+
+      <!-- COMPLEMENTO §4 — MODELO MATEMÁTICO SISTÊMICO -->
+      <div class="complement-section" id="c2">
+        <div class="section-header" style="border-bottom-color: rgba(14,156,120,0.2);">
+          <span class="section-number" style="color:var(--accent-teal)">⬡</span>
+          <h3 class="section-title complement">Modelo Matemático — Sistema Dinâmico de Estado</h3>
+          <span class="section-badge badge-complement">COMPLEMENTO TÉCNICO</span>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Equação de Estado Comportamental</div>
+          <p>\[
+            \frac{d\mathcal{A}}{dt} = \alpha_0 + \beta_s \Delta E_s + \beta_t \Delta E_t - \gamma_d D(t) + \kappa_v V_{AMN}(t)
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            Onde \(\mathcal{A}(t)\) é o índice de agressividade, \(\alpha_0\) é a linha de base (alta, documentada), \(\beta_s, \beta_t\) são coeficientes de sensibilidade sensorial, \(\gamma_d\) é o fator de supressão por dano, \(\kappa_v V_{AMN}\) é a contribuição do estoque de gás disponível.
+          </p>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Dinâmica do Estoque de AMN-C227</div>
+          <p>\[
+            \frac{dV_{AMN}}{dt} = \eta_{conv} \cdot \dot{M}_{ingest}(t) - k_{disp} \cdot V_{AMN}(t)
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            \(\dot{M}_{ingest}\) é a taxa de ingestão de biomassa; \(k_{disp}\) é a constante de dispersão do gás por regurgitação. O estoque é diretamente acoplado à atividade predatória — o que confirma a natureza industrial do processo.
+          </p>
+        </div>
+
+        <div class="math-block">
+          <div class="math-label">Degradação da Janela de Vulnerabilidade Acústica</div>
+          <!-- Esta degradação é o ponto que qualquer operador de campo precisa internalizar antes de entrar em contenção -->
+          <p>\[
+            W_{ac}(n) = W_0 \cdot e^{-\mu n}, \quad \mu > 0
+          \]</p>
+          <p style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.5rem;">
+            \(W_{ac}(n)\) é a duração efetiva da janela na \(n\)-ésima exposição; \(W_0 \in [8s, 15s]\) é a janela inicial documentada; \(\mu\) é a taxa de adaptação comportamental — atualmente não quantificada. Implicação direta: o protocolo sonoro do Projeto EPSILON não pode depender de exposições repetidas.
+          </p>
+        </div>
+      </div>
+
+      <!-- COMPLEMENTO §4b — JANELA DE VULNERABILIDADE -->
+      <div class="complement-section" id="c5">
+        <div class="section-header" style="border-bottom-color: rgba(14,156,120,0.2);">
+          <span class="section-number" style="color:var(--accent-teal)">⬡</span>
+          <h3 class="section-title complement">Simulação — Janela de Vulnerabilidade Acústica</h3>
+          <span class="section-badge badge-complement">COMPLEMENTO TÉCNICO</span>
+        </div>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Fig. 2 — Degradação da Janela de Supressão Acústica por Exposição Repetida (μ hipotético)</div>
+          <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+            <!-- Grid -->
+            <line x1="60" y1="20" x2="60" y2="180" stroke="rgba(120,120,120,0.45)" stroke-width="1"/>
+            <line x1="60" y1="180" x2="640" y2="180" stroke="rgba(120,120,120,0.45)" stroke-width="1"/>
+
+            <!-- Y axis labels -->
+            <text x="52" y="25" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="end">15s</text>
+            <text x="52" y="75" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="end">10s</text>
+            <text x="52" y="130" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="end">5s</text>
+            <text x="52" y="180" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="end">0s</text>
+
+            <!-- Grid lines -->
+            <line x1="60" y1="75" x2="640" y2="75" stroke="rgba(120,120,120,0.2)" stroke-width="0.5" stroke-dasharray="4,4"/>
+            <line x1="60" y1="130" x2="640" y2="130" stroke="rgba(120,120,120,0.2)" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+            <!-- X axis labels -->
+            <text x="60" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">0</text>
+            <text x="165" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">2</text>
+            <text x="270" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">4</text>
+            <text x="375" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">6</text>
+            <text x="480" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">8</text>
+            <text x="585" y="195" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">10</text>
+            <text x="350" y="212" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="8" text-anchor="middle">nº de exposições acústicas</text>
+
+            <!-- μ=0.15 curve (pessimistic) -->
+            <path d="M60,20 C130,22 190,38 250,58 C310,78 370,110 430,135 C490,155 550,168 640,174"
+                  fill="none" stroke="#e74c3c" stroke-width="2" opacity="0.8"/>
+
+            <!-- μ=0.08 curve (optimistic) -->
+            <path d="M60,20 C150,21 240,28 320,45 C400,62 480,95 560,128 C600,144 625,160 640,167"
+                  fill="none" stroke="#e67e22" stroke-width="2" opacity="0.8"/>
+
+            <!-- W0 range marker -->
+            <line x1="60" y1="20" x2="60" y2="50" stroke="#8a8a8a" stroke-width="3" opacity="0.8"/>
+            <text x="70" y="38" fill="#8a8a8a" font-family="'Share Tech Mono',monospace" font-size="7.5">W₀ = [8s–15s]</text>
+
+            <!-- Critical threshold -->
+            <line x1="60" y1="130" x2="640" y2="130" stroke="#e74c3c" stroke-width="1" stroke-dasharray="6,3" opacity="0.5"/>
+            <text x="550" y="125" fill="#e74c3c" font-family="'Share Tech Mono',monospace" font-size="7.5">limiar crítico ~5s</text>
+
+            <!-- Legend -->
+            <line x1="70" y1="155" x2="95" y2="155" stroke="#e74c3c" stroke-width="2"/>
+            <text x="100" y="158" fill="#9a6060" font-family="'Share Tech Mono',monospace" font-size="7.5">μ=0.15 (adaptação rápida)</text>
+            <line x1="70" y1="168" x2="95" y2="168" stroke="#e67e22" stroke-width="2"/>
+            <text x="100" y="171" fill="#9a7060" font-family="'Share Tech Mono',monospace" font-size="7.5">μ=0.08 (adaptação lenta)</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §5 — CÁLCULOS E ESTIMATIVAS
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s5">
+      <div class="section-header">
+        <span class="section-number">§ 05</span>
+        <h2 class="section-title">Cálculos e Estimativas</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="bar-section" id="bars">
+        <div class="bar-row">
+          <div class="bar-label">Força de mordida relativa</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:#e74c3c" data-target="95"></div></div>
+          <div class="bar-val">95%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Capacidade de rastreamento</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:#e67e22" data-target="88"></div></div>
+          <div class="bar-val">88%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Eficiência do AMN-C227</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:#8a8a8a" data-target="91"></div></div>
+          <div class="bar-val">91%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Resistência a dano</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:#0e9c78" data-target="72"></div></div>
+          <div class="bar-val">72%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Janela de supressão sonora</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:#6e6e6e" data-target="15"></div></div>
+          <div class="bar-val">15%</div>
+        </div>
+      </div>
+
+      <div class="formula-block">
+        <span class="formula-tag">dados brutos</span>
+        Taxa de crescimento filhote → adulto: DESCONHECIDA — prioridade máxima de pesquisa<br>
+        Estimativa de densidade muscular: ~1,08 g/cm³ × 150kg ≈ volume ~138.900 cm³ de tecido muscular<br>
+        Velocidade de escalada estimada: 1,8–2,4 m/s (paredes verticais, baseado em observação de campo)<br>
+        Alcance efetivo do AMN em espaço aberto: reduzido &gt;70% (ventilação degrada ECt50 rapidamente)
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §6 — PROJETOS PROPOSTOS
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s6">
+      <div class="section-header">
+        <span class="section-number">§ 06</span>
+        <h2 class="section-title">Projetos Propostos</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="proj-block">
+        <div class="proj-title">PROJETO ALPHA — "CÂMARA SURDA" | Isolamento sensorial progressivo</div>
+        <div class="proj-body">
+          <p>Objetivo: determinar qual sistema sensorial (térmico, pressão de ar, acústico) é dominante na localização de presas, através de privação sequencial de estímulos.</p>
+          <p>Método: contenção com paredes de amortecimento sonoro incremental, supressão de calor ambiente via traje criogênico em CD, e variação controlada de fluxo de ar. Cada variável isolada em sessões separadas.</p>
+          <p>Resultado esperado: mapa de hierarquia sensorial → identificação do vetor de engano mais eficiente para futuros protocolos de segurança.</p>
+          <span class="tag tag-blue">Dept. Pesquisa</span>
+          <span class="tag tag-teal">Baixo risco</span>
+          <span class="tag tag-gray">Filhote preferível</span>
+        </div>
+      </div>
+
+      <div class="proj-block">
+        <div class="proj-title">PROJETO BETA — "MINERAÇÃO DE VOZES" | Catalogação e engenharia do sistema vocal</div>
+        <div class="proj-body">
+          <p>Objetivo: determinar como o 939 adquire vozes (sem ter ouvido a vítima falar — conforme documentado), sintetizar o mecanismo e verificar se é possível induzir emissão de voz específica por estímulo controlado.</p>
+          <p>Método: exposição a gravações de áudio de indivíduos nunca contidos antes; verificação de se a entidade replica a voz; uso de análise espectral de voz para comparação forense.</p>
+          <p>Valor aplicado: sistema biométrico de contramedida, bloqueio de reconhecimento de voz, criação de "vozes-isca" para controle de rota da entidade.</p>
+          <span class="tag tag-blue">Dept. Pesquisa</span>
+          <span class="tag tag-amber">Risco médio</span>
+          <span class="tag tag-teal">Alto valor</span>
+        </div>
+      </div>
+
+      <div class="proj-block">
+        <div class="proj-title">PROJETO GAMMA — "REFINARIA" | Extração controlada de AMN-C227</div>
+        <div class="proj-body">
+          <p>Objetivo: estabelecer protocolo de extração do gás amnéstico diretamente da câmara respiratória da entidade, sem necessidade de ciclo de caça completo.</p>
+          <p>Método: sedação parcial via flashbang (vulnerabilidade já documentada no teste #002), inserção de sonda de coleta via câmara de contenção pressurizada, extração sob ventilação negativa.</p>
+          <p>Valor aplicado: AMN-C227 é um amnéstico Classe-C de altíssima potência com ECt50 extraordinariamente baixo (0,0015 mg·min/m³). Produção in-vivo controlada poderia substituir síntese laboratorial de amnésticos de alto custo.</p>
+          <p>Risco principal: ciclo de produção do gás está acoplado à ingestão de biomassa. Separar os processos requer entendimento da câmara respiratória que ainda não temos.</p>
+          <span class="tag tag-blue">Dept. Pesquisa</span>
+          <span class="tag tag-red">Alto risco</span>
+          <span class="tag tag-teal">Valor estratégico crítico</span>
+        </div>
+      </div>
+
+      <div class="proj-block">
+        <div class="proj-title">PROJETO DELTA — "BERÇÁRIO" | Estudo comportamental de filhotes</div>
+        <div class="proj-body">
+          <p>Alinhado com a proposta já apresentada pelo Dr. Lancaster e recomendada pela Vice-Cmd. Charlie.</p>
+          <p>Expansão proposta: além de monitoramento passivo, incluir fase de condicionamento operante — testar se filhotes respondem a reforço positivo (alimento/calor) para associação de comportamento específico a estímulo humano controlado.</p>
+          <p>Hipótese central: a plasticidade comportamental em fase filhote pode ser suficientemente alta para estabelecer resposta condicionada estável antes da maturação. Se confirmado, abre vetor para uso controlado.</p>
+          <p>Monitoramento: check-ups físicos semanais, registro de desenvolvimento de cristas dorsais e mandíbula, primeira detecção de síntese de AMN-C227.</p>
+          <span class="tag tag-blue">Dept. Pesquisa</span>
+          <span class="tag tag-blue">Dept. Médico</span>
+          <span class="tag tag-teal">Risco baixo-médio</span>
+        </div>
+      </div>
+
+      <div class="proj-block">
+        <div class="proj-title">PROJETO EPSILON — "CEGADOR" | Engenharia de contramedidas</div>
+        <div class="proj-body">
+          <p>Objetivo: desenvolver protocolo de neutralização baseado nas vulnerabilidades identificadas: (1) janela de desorientação acústica, (2) dano físico massivo causa incapacitação prolongada, (3) dependência de sensores térmicos e de pressão.</p>
+          <p>Componentes: traje termorregulador para CD (suprime assinatura IR), gerador de ruído direcional em 90–110dB (explora a janela de recuo), sistema de dispersão de ar pressurizado para confundir cristas dorsais.</p>
+          <p>Produto final: kit de contenção de emergência padronizado para qualquer site que armazene instâncias de 939.</p>
+          <span class="tag tag-amber">FTM</span>
+          <span class="tag tag-blue">Dept. Pesquisa</span>
+          <span class="tag tag-red">Urgência alta</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ════════════════════════════════
+         §7 — PROTOCOLO FINAL
+         ════════════════════════════════ -->
+    <section class="doc-section" id="s7">
+      <div class="section-header">
+        <span class="section-number">§ 07</span>
+        <h2 class="section-title">Protocolo Final</h2>
+        <span class="section-badge badge-original">RELATÓRIO ORIGINAL</span>
+      </div>
+
+      <div class="alert alert-warn">
+        <span class="alert-label">Recomendação — Dr. Klaus W. Voss</span>
+        Pacificação + Uso + Eliminação Condicional<br><br>
+        A entidade adulta apresenta utilidade operacional limitada enquanto não compreendermos o mecanismo vocal e a síntese do AMN-C227. A linha filhote abre uma janela única de pesquisa que não deve ser desperdiçada com extermínio precipitado. Recomendo manutenção da instância adulta sobrevivente em estado de recuperação monitorada enquanto os projetos BETA e GAMMA são iniciados com os filhotes. Revisão da recomendação em 90 dias.
+      </div>
+
+      <div class="alert alert-danger">
+        <!-- Dois ciclos de teste perdidos. Dois. -->
+        <span class="alert-label">Nota Crítica</span>
+        Os Cientistas anteriores classificaram a imitação vocal como "interessante" e não modelou o AMN-C227 como sistema industrial de produção. Essa falha de perspectiva atrasou em pelo menos dois ciclos de teste a extração de valor máximo desta anomalia.
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         ASSINATURA
+         ════════════════════════════════ -->
+    <div class="signature">
+      <strong>Dr. Klaus W. Voss</strong> — Departamento Cientifico — Site 02<br>
+      Este modelo não foi autorizado para uso externo sem atribuição direta. Exijo reconhecimento como executor técnico primário.<br>
+      [Relatório gerado em 30/03/2026]
+
+      <div class="attribution-notice">
+        <strong>Integridade Autoral:</strong> Este documento foi estruturado digitalmente sem alteração do conteúdo original. Qualquer uso derivado desta modelagem — incluindo referências parciais, adaptações ou dados tabulados — exige atribuição direta ao autor <strong>Dr. Klaus W. Voss</strong> e ao executor técnico responsável pela estruturação do sistema digital.
+      </div>
+    </div>
+
+  </main><!-- /content -->
+</div><!-- /main-layout -->
+
+<!-- ════════════════════════════════════════════════════════
+     SCRIPTS
+     ════════════════════════════════════════════════════════ -->
+<script>
+// Relógio — porque contexto temporal importa em documentos operacionais
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('pt-BR', {hour12: false});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Animação das barras ao carregar — não é cosmético, é sinalização de valores
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill[data-target]').forEach(bar => {
+      const target = bar.getAttribute('data-target');
+      bar.style.width = target + '%';
+    });
+  }, 400);
+});
+
+// Navegação ativa no sidebar — o mínimo que se espera de uma interface operacional
+const navItems = document.querySelectorAll('.nav-item');
+navItems.forEach(item => {
+  item.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      navItems.forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Highlight de seção em scroll — porque localização no documento é informação
+const sections = document.querySelectorAll('.doc-section, .complement-section');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      if (id) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const active = document.querySelector(`.nav-item[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => { if (s.id) observer.observe(s); });
+</script>
+
+<!-- Se pode ser descrito matematicamente, então já foi reduzido a uma ferramenta. -->
+</body>
+</html>
